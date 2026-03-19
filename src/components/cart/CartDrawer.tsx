@@ -11,8 +11,6 @@ export default function CartDrawer() {
 
     const handleCheckout = () => {
         processCartCheckout(items, () => {
-            // Opcional: cerrar el carrito después de abrir el checkout
-            // toggleCart();
             console.log("Checkout abierto exitosamente");
         });
     };
@@ -27,42 +25,49 @@ export default function CartDrawer() {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={toggleCart}
-                        className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50"
+                        className="fixed inset-0 bg-black/50 backdrop-blur-md z-50"
                     />
 
-                    {/* Drawer */}
+                    {/* Drawer - Glass panel */}
                     <motion.div
                         initial={{ x: "100%" }}
                         animate={{ x: 0 }}
                         exit={{ x: "100%" }}
                         transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                        className="fixed top-0 right-0 h-full w-full max-w-md bg-surface border-l border-white/10 shadow-2xl z-50 flex flex-col"
+                        className="fixed top-0 right-0 h-full w-full max-w-md z-50 flex flex-col"
+                        style={{
+                            background: 'rgba(10, 10, 10, 0.85)',
+                            backdropFilter: 'blur(40px)',
+                            WebkitBackdropFilter: 'blur(40px)',
+                            borderLeft: '1px solid rgba(255,255,255,0.06)',
+                            boxShadow: '-20px 0 60px rgba(0,0,0,0.5)'
+                        }}
                     >
                         {/* Header */}
-                        <div className="p-6 border-b border-white/10 flex items-center justify-between">
+                        <div className="p-6 flex items-center justify-between" style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
                             <h2 className="text-xl font-bold text-white flex items-center gap-2">
-                                <ShoppingBag className="text-primary" />
+                                <ShoppingBag className="text-primary drop-shadow-[0_0_8px_rgba(230,36,41,0.5)]" />
                                 Tu Carrito
                             </h2>
                             <button
                                 onClick={toggleCart}
-                                className="p-2 hover:bg-white/10 rounded-full transition-colors"
+                                className="p-2 glass-button rounded-full transition-colors"
                             >
                                 <X size={20} className="text-gray-400" />
                             </button>
                         </div>
 
                         {/* Items */}
-                        <div className="flex-1 overflow-y-auto p-6 space-y-6">
+                        <div className="flex-1 overflow-y-auto p-6 space-y-4">
                             {items.length === 0 ? (
                                 <div className="h-full flex flex-col items-center justify-center text-center space-y-4">
-                                    <div className="w-20 h-20 rounded-full bg-white/5 flex items-center justify-center">
+                                    <div className="w-20 h-20 rounded-full glass-panel flex items-center justify-center">
                                         <ShoppingBag size={40} className="text-gray-600" />
                                     </div>
                                     <p className="text-gray-400 text-lg">Tu carrito está vacío</p>
                                     <button
                                         onClick={toggleCart}
-                                        className="text-primary hover:underline font-medium"
+                                        className="text-primary hover:underline font-medium hover:drop-shadow-[0_0_8px_rgba(230,36,41,0.4)] transition-all"
                                     >
                                         Explorar productos
                                     </button>
@@ -75,7 +80,7 @@ export default function CartDrawer() {
                                         initial={{ opacity: 0, y: 20 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         exit={{ opacity: 0, scale: 0.9 }}
-                                        className="flex gap-4 bg-white/5 p-4 rounded-xl border border-white/5"
+                                        className="flex gap-4 glass-refraction rounded-xl p-4"
                                     >
                                         {/* Image */}
                                         <div className="relative w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 bg-black">
@@ -95,7 +100,7 @@ export default function CartDrawer() {
                                             </div>
 
                                             <div className="flex items-center justify-between mt-2">
-                                                <div className="flex items-center gap-3 bg-black/30 rounded-lg p-1">
+                                                <div className="flex items-center gap-3 glass-panel rounded-lg p-1">
                                                     <button
                                                         onClick={() => updateQuantity(item.id, item.quantity - 1)}
                                                         className="p-1 hover:text-white text-gray-400 transition-colors"
@@ -127,14 +132,14 @@ export default function CartDrawer() {
 
                         {/* Footer */}
                         {items.length > 0 && (
-                            <div className="p-6 border-t border-white/10 bg-black/20 space-y-4">
+                            <div className="p-6 space-y-4" style={{ borderTop: '1px solid rgba(255,255,255,0.06)', background: 'rgba(0,0,0,0.3)' }}>
                                 <div className="flex items-center justify-between text-lg font-bold">
                                     <span className="text-gray-400">Subtotal</span>
                                     <span className="text-white">${subtotal.toFixed(2)}</span>
                                 </div>
                                 <button
                                     onClick={handleCheckout}
-                                    className="w-full bg-primary hover:bg-primary/90 text-black font-bold py-4 rounded-xl transition-all shadow-[0_0_20px_rgba(0,243,255,0.2)] hover:shadow-[0_0_30px_rgba(0,243,255,0.4)]"
+                                    className="w-full glass-button glass-button-primary text-white font-bold py-4 rounded-xl transition-all"
                                 >
                                     Comprar
                                 </button>

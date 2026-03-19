@@ -47,7 +47,10 @@ export default function ImageComparison({ imageRaw, imageResult, productName }: 
     return (
         <div
             ref={containerRef}
-            className="relative w-full overflow-hidden rounded-2xl border border-white/10 bg-gray-900 cursor-ew-resize select-none inline-block"
+            className="relative w-full overflow-hidden rounded-2xl glass-refraction cursor-ew-resize select-none inline-block"
+            style={{
+                boxShadow: '0 8px 32px rgba(0,0,0,0.3), 0 0 20px rgba(230,36,41,0.08)'
+            }}
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
             onTouchMove={handleTouchMove}
@@ -84,31 +87,43 @@ export default function ImageComparison({ imageRaw, imageResult, productName }: 
 
             </div>
 
-            {/* Slider Handle */}
+            {/* Slider Handle - Glass style */}
             <div
-                className="absolute top-0 bottom-0 w-1 bg-white/80 cursor-ew-resize z-20"
-                style={{ left: `${sliderPosition}%`, transform: "translateX(-50%)" }}
+                className="absolute top-0 bottom-0 w-0.5 cursor-ew-resize z-20"
+                style={{
+                    left: `${sliderPosition}%`,
+                    transform: "translateX(-50%)",
+                    background: 'rgba(255,255,255,0.6)',
+                    boxShadow: '0 0 10px rgba(255,255,255,0.3)'
+                }}
                 onMouseDown={handleMouseDown}
                 onTouchStart={handleMouseDown}
             >
-                {/* Handle Circle */}
+                {/* Handle Circle - Glass */}
                 <motion.div
-                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-white rounded-full shadow-[0_0_20px_rgba(255,255,255,0.5)] flex items-center justify-center cursor-ew-resize border-4 border-background"
+                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 rounded-full flex items-center justify-center cursor-ew-resize"
+                    style={{
+                        background: 'rgba(255,255,255,0.15)',
+                        backdropFilter: 'blur(12px)',
+                        WebkitBackdropFilter: 'blur(12px)',
+                        border: '2px solid rgba(255,255,255,0.3)',
+                        boxShadow: '0 0 20px rgba(255,255,255,0.2), 0 0 40px rgba(230,36,41,0.1)'
+                    }}
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.95 }}
                 >
                     <div className="flex gap-1">
-                        <div className="w-0.5 h-6 bg-background rounded-full"></div>
-                        <div className="w-0.5 h-6 bg-background rounded-full"></div>
+                        <div className="w-0.5 h-6 bg-white/80 rounded-full"></div>
+                        <div className="w-0.5 h-6 bg-white/80 rounded-full"></div>
                     </div>
                 </motion.div>
             </div>
 
-            {/* Instruction Hint */}
+            {/* Instruction Hint - Glass pill */}
             <motion.div
                 initial={{ opacity: 1 }}
                 animate={{ opacity: isDragging ? 0 : 0.7 }}
-                className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/50 backdrop-blur-md px-4 py-2 rounded-full text-xs text-white pointer-events-none"
+                className="absolute bottom-4 left-1/2 -translate-x-1/2 glass-panel px-4 py-2 rounded-full text-xs text-white pointer-events-none"
             >
                 Drag to compare
             </motion.div>

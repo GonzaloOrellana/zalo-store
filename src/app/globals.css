@@ -16,6 +16,16 @@
 :root {
   --background: #050505;
   --foreground: #ffffff;
+
+  /* Glassmorphism tokens */
+  --glass-bg: rgba(255, 255, 255, 0.04);
+  --glass-bg-hover: rgba(255, 255, 255, 0.08);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-border-hover: rgba(255, 255, 255, 0.15);
+  --glass-glow-primary: rgba(230, 36, 41, 0.25);
+  --glass-glow-secondary: rgba(157, 78, 221, 0.25);
+  --glass-blur: 20px;
+  --glass-blur-heavy: 40px;
 }
 
 body {
@@ -24,7 +34,297 @@ body {
   font-family: var(--font-sans);
 }
 
-/* Custom scrollbar styles */
+/* ═══════════════════════════════════════════
+   GLASS PANELS & CARDS
+   ═══════════════════════════════════════════ */
+
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-panel:hover {
+  background: var(--glass-bg-hover);
+  border-color: var(--glass-border-hover);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow:
+    0 16px 48px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 0 30px var(--glass-glow-primary);
+}
+
+/* Glass with colored refraction border */
+.glass-refraction {
+  position: relative;
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid transparent;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-refraction::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    rgba(230, 36, 41, 0.15),
+    rgba(255, 255, 255, 0.05) 30%,
+    rgba(157, 78, 221, 0.15) 70%,
+    rgba(255, 255, 255, 0.05)
+  );
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  -webkit-mask-composite: xor;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+  opacity: 0.6;
+}
+
+.glass-refraction:hover::before {
+  opacity: 1;
+  background: linear-gradient(
+    135deg,
+    rgba(230, 36, 41, 0.4),
+    rgba(255, 255, 255, 0.1) 30%,
+    rgba(157, 78, 221, 0.4) 70%,
+    rgba(255, 255, 255, 0.1)
+  );
+}
+
+/* ═══════════════════════════════════════════
+   GLASS BUTTONS
+   ═══════════════════════════════════════════ */
+
+.glass-button {
+  position: relative;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+.glass-button::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.06) 45%,
+    rgba(255, 255, 255, 0.12) 50%,
+    rgba(255, 255, 255, 0.06) 55%,
+    transparent 60%
+  );
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
+}
+
+.glass-button:hover::after {
+  transform: translateX(100%);
+}
+
+.glass-button:hover {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    0 0 20px var(--glass-glow-primary),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+.glass-button-primary {
+  background: linear-gradient(135deg, rgba(230, 36, 41, 0.2), rgba(157, 78, 221, 0.15));
+  border: 1px solid rgba(230, 36, 41, 0.25);
+  box-shadow:
+    0 4px 20px rgba(230, 36, 41, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.glass-button-primary:hover {
+  background: linear-gradient(135deg, rgba(230, 36, 41, 0.35), rgba(157, 78, 221, 0.25));
+  border-color: rgba(230, 36, 41, 0.45);
+  box-shadow:
+    0 8px 40px rgba(230, 36, 41, 0.3),
+    0 0 60px rgba(230, 36, 41, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* ═══════════════════════════════════════════
+   GLASS INPUTS
+   ═══════════════════════════════════════════ */
+
+.glass-input {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.3s ease;
+  color: white;
+}
+
+.glass-input:focus {
+  outline: none;
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(230, 36, 41, 0.4);
+  box-shadow: 0 0 20px rgba(230, 36, 41, 0.1), 0 0 40px rgba(230, 36, 41, 0.05);
+}
+
+.glass-input::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* ═══════════════════════════════════════════
+   LIQUID BLOBS & ANIMATIONS
+   ═══════════════════════════════════════════ */
+
+.liquid-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.4;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.liquid-blob-primary {
+  background: radial-gradient(circle, rgba(230, 36, 41, 0.5) 0%, rgba(230, 36, 41, 0) 70%);
+}
+
+.liquid-blob-secondary {
+  background: radial-gradient(circle, rgba(157, 78, 221, 0.5) 0%, rgba(157, 78, 221, 0) 70%);
+}
+
+.liquid-blob-mixed {
+  background: radial-gradient(circle, rgba(230, 36, 41, 0.3) 0%, rgba(157, 78, 221, 0.3) 50%, transparent 70%);
+}
+
+@keyframes blob-float-1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(60px, -80px) scale(1.15); }
+  50% { transform: translate(-40px, -120px) scale(0.9); }
+  75% { transform: translate(80px, -40px) scale(1.08); }
+}
+
+@keyframes blob-float-2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(-70px, 60px) scale(1.1); }
+  50% { transform: translate(50px, 90px) scale(0.85); }
+  75% { transform: translate(-90px, 30px) scale(1.12); }
+}
+
+@keyframes blob-float-3 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(40px, -60px) scale(1.2); }
+  66% { transform: translate(-60px, 40px) scale(0.9); }
+}
+
+.blob-animate-1 { animation: blob-float-1 20s ease-in-out infinite; }
+.blob-animate-2 { animation: blob-float-2 25s ease-in-out infinite; }
+.blob-animate-3 { animation: blob-float-3 18s ease-in-out infinite; }
+
+/* ═══════════════════════════════════════════
+   SHIMMER & GLOW EFFECTS
+   ═══════════════════════════════════════════ */
+
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.shimmer-border {
+  position: relative;
+}
+
+.shimmer-border::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 25%,
+    rgba(230, 36, 41, 0.4) 50%,
+    transparent 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 4s linear infinite;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  -webkit-mask-composite: xor;
+  pointer-events: none;
+}
+
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+.glow-pulse {
+  animation: glow-pulse 3s ease-in-out infinite;
+}
+
+/* Gradient text glow */
+.glass-text-glow {
+  text-shadow:
+    0 0 20px rgba(230, 36, 41, 0.3),
+    0 0 40px rgba(157, 78, 221, 0.15);
+}
+
+/* Glass divider */
+.glass-divider {
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(230, 36, 41, 0.5), rgba(157, 78, 221, 0.5), transparent);
+  border: none;
+  border-radius: 1px;
+}
+
+/* Noise texture overlay */
+.noise-overlay::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.015;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ═══════════════════════════════════════════
+   CUSTOM SCROLLBAR
+   ═══════════════════════════════════════════ */
+
 .scrollbar-thin {
   scrollbar-width: thin;
   scrollbar-color: rgba(230, 36, 41, 0.5) rgba(255, 255, 255, 0.05);

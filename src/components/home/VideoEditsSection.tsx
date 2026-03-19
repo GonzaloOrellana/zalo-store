@@ -64,19 +64,18 @@ export default function VideoEditsSection() {
             if (isPlaying) {
                 currentVideo.pause();
             } else {
-                currentVideo.play();
+                currentVideo.play().catch(error => console.warn("Video play failed:", error));
             }
             setIsPlaying(!isPlaying);
             handleInteraction();
         }
     };
 
-    // Control video playback when currentIndex changes
     useEffect(() => {
         videoRefs.current.forEach((video, index) => {
             if (video) {
                 if (index === currentIndex && isPlaying) {
-                    video.play();
+                    video.play().catch(error => console.warn("Video auto-play prevented:", error));
                     handleInteraction();
                 } else {
                     video.pause();
@@ -87,7 +86,6 @@ export default function VideoEditsSection() {
 
     const getCardStyle = (index: number) => {
         const diff = index - currentIndex;
-        const absX = Math.abs(diff);
 
         // Center card
         if (diff === 0) {
@@ -155,9 +153,15 @@ export default function VideoEditsSection() {
     };
 
     return (
-        <section className="relative py-20 md:py-32 overflow-hidden bg-black">
-            {/* Radial gradient background */}
-            <div className="absolute inset-0 bg-gradient-radial from-gray-900/30 via-black to-black" />
+        <section className="relative py-20 md:py-32 overflow-hidden">
+            {/* Glassmorphism background */}
+            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+
+            {/* Liquid blobs behind carousel */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                <div className="liquid-blob liquid-blob-primary blob-animate-2 w-[500px] h-[500px] top-[5%] right-[10%] opacity-25" />
+                <div className="liquid-blob liquid-blob-secondary blob-animate-1 w-[400px] h-[400px] bottom-[10%] left-[5%] opacity-20" />
+            </div>
 
             <div className="container mx-auto px-4 relative z-10">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
@@ -170,9 +174,9 @@ export default function VideoEditsSection() {
                         className="space-y-6"
                     >
                         <div className="space-y-4">
-                            <h2 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight">
+                            <h2 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight glass-text-glow">
                                 Crea contenido que{" "}
-                                <span className="text-primary">detenga el scroll.</span>
+                                <span className="text-primary drop-shadow-[0_0_15px_rgba(230,36,41,0.4)]">detenga el scroll.</span>
                             </h2>
                             <p className="text-lg md:text-xl text-gray-300 leading-relaxed">
                                 Ediciones dinámicas, transiciones fluidas y efectos que retienen la
@@ -189,17 +193,19 @@ export default function VideoEditsSection() {
                                 {videoEdits.map((video, index) => {
                                     const style = getCardStyle(index);
                                     return (
-                                        <motion.div
+                                        <div
                                             key={video.id}
-                                            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
-                                            initial={{ opacity: 0 }}
-                                            animate={{
-                                                scale: style.scale,
-                                                rotateY: style.rotateY,
-                                                opacity: style.opacity,
-                                                zIndex: style.zIndex,
-                                                x: style.x,
-                                            }}
+                                            className="absolute left-1/2 top-1/2"
+                                            style={{ transform: "translate(-50%, -50%)", zIndex: style.zIndex }}
+                                        >
+                                            <motion.div
+                                                initial={{ opacity: 0 }}
+                                                animate={{
+                                                    scale: style.scale,
+                                                    rotateY: style.rotateY,
+                                                    opacity: style.opacity,
+                                                    x: style.x,
+                                                }}
                                             transition={{
                                                 duration: 0.6,
                                                 ease: [0.32, 0.72, 0, 1],
@@ -208,9 +214,17 @@ export default function VideoEditsSection() {
                                                 transformStyle: "preserve-3d",
                                             }}
                                         >
-                                            {/* Video Card - Pill Shape */}
+                                            {/* Video Card - Pill Shape with glass border */}
                                             <div
-                                                className="w-[200px] h-[355px] md:w-[240px] md:h-[426px] rounded-[60px] shadow-2xl overflow-hidden relative bg-black"
+                                                className="w-[200px] h-[355px] md:w-[240px] md:h-[426px] rounded-[60px] overflow-hidden relative bg-black"
+                                                style={{
+                                                    boxShadow: index === currentIndex
+                                                        ? '0 0 40px rgba(230,36,41,0.15), 0 20px 60px rgba(0,0,0,0.5)'
+                                                        : '0 10px 40px rgba(0,0,0,0.5)',
+                                                    border: index === currentIndex
+                                                        ? '1px solid rgba(255,255,255,0.12)'
+                                                        : '1px solid rgba(255,255,255,0.05)'
+                                                }}
                                                 onMouseEnter={handleInteraction}
                                                 onMouseMove={handleInteraction}
                                                 onClick={handleInteraction}
@@ -223,6 +237,7 @@ export default function VideoEditsSection() {
                                                     loop
                                                     autoPlay
                                                     playsInline
+                                                    muted
                                                 />
 
                                                 {/* Overlay effect */}
@@ -243,7 +258,7 @@ export default function VideoEditsSection() {
                                                             className="absolute inset-0 flex items-center justify-center group cursor-pointer z-10"
                                                             aria-label={isPlaying ? "Pause video" : "Play video"}
                                                         >
-                                                            <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center group-hover:bg-white/30 transition-all duration-300 group-hover:scale-110">
+                                                            <div className="w-16 h-16 rounded-full glass-button flex items-center justify-center group-hover:scale-110 transition-all duration-300">
                                                                 {isPlaying ? (
                                                                     <Pause className="w-8 h-8 text-white" />
                                                                 ) : (
@@ -254,41 +269,47 @@ export default function VideoEditsSection() {
                                                     )}
                                                 </AnimatePresence>
                                             </div>
-                                        </motion.div>
+                                            </motion.div>
+                                        </div>
                                     );
                                 })}
                             </AnimatePresence>
                         </div>
 
-                        {/* Navigation Buttons */}
-                        <button
-                            onClick={handlePrevious}
-                            className="absolute left-0 top-1/2 -translate-y-1/2 z-50 bg-white/10 hover:bg-white/20 backdrop-blur-md p-3 rounded-full transition-all duration-300 hover:scale-110"
-                            aria-label="Previous video"
-                        >
-                            <ChevronLeft className="w-6 h-6 text-white" />
-                        </button>
-                        <button
-                            onClick={handleNext}
-                            className="absolute right-0 top-1/2 -translate-y-1/2 z-50 bg-white/10 hover:bg-white/20 backdrop-blur-md p-3 rounded-full transition-all duration-300 hover:scale-110"
-                            aria-label="Next video"
-                        >
-                            <ChevronRight className="w-6 h-6 text-white" />
-                        </button>
+                        {/* Centralized Controls for Mobile-Friendly Interaction */}
+                        <div className="absolute bottom-4 md:bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-6 z-50">
+                            {/* Previous Button */}
+                            <button
+                                onClick={handlePrevious}
+                                className="glass-button p-2.5 md:p-3 rounded-full hover:scale-105 transition-transform"
+                                aria-label="Previous video"
+                            >
+                                <ChevronLeft className="w-5 h-5 text-white" />
+                            </button>
 
-                        {/* Dots indicator */}
-                        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 flex gap-2 z-50">
-                            {videoEdits.map((_, index) => (
-                                <button
-                                    key={index}
-                                    onClick={() => setCurrentIndex(index)}
-                                    className={`w-2 h-2 rounded-full transition-all duration-300 ${index === currentIndex
-                                        ? "bg-primary w-8"
-                                        : "bg-white/30 hover:bg-white/50"
-                                        }`}
-                                    aria-label={`Go to video ${index + 1}`}
-                                />
-                            ))}
+                            {/* Dots indicator - Glass pills */}
+                            <div className="flex gap-2">
+                                {videoEdits.map((_, index) => (
+                                    <button
+                                        key={index}
+                                        onClick={() => setCurrentIndex(index)}
+                                        className={`h-2 rounded-full transition-all duration-300 ${index === currentIndex
+                                            ? "bg-primary w-8 shadow-[0_0_10px_rgba(230,36,41,0.5)]"
+                                            : "bg-white/20 w-2 hover:bg-white/40"
+                                            }`}
+                                        aria-label={`Go to video ${index + 1}`}
+                                    />
+                                ))}
+                            </div>
+
+                            {/* Next Button */}
+                            <button
+                                onClick={handleNext}
+                                className="glass-button p-2.5 md:p-3 rounded-full hover:scale-105 transition-transform"
+                                aria-label="Next video"
+                            >
+                                <ChevronRight className="w-5 h-5 text-white" />
+                            </button>
                         </div>
                     </div>
                 </div>

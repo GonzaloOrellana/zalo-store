@@ -6,8 +6,8 @@ export default function ProductGrid() {
     return (
         <section id="shop" className="container mx-auto px-4 py-20 relative z-10">
             <div className="flex flex-col items-center mb-8">
-                <h2 className="font-display text-3xl md:text-4xl font-bold text-white mb-4" style={{ textShadow: '0 2px 10px rgba(0,0,0,0.8)' }}>Presets</h2>
-                <div className="w-20 h-1 bg-primary rounded-full"></div>
+                <h2 className="font-display text-3xl md:text-4xl font-bold text-white mb-4 glass-text-glow" style={{ textShadow: '0 2px 10px rgba(0,0,0,0.8)' }}>Presets</h2>
+                <div className="glass-divider w-20" />
             </div>
 
             {/* Scroll indicator - solo visible en móvil */}

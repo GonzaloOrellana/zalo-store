@@ -1,7 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { Mail, Instagram, Send } from "lucide-react";
+import { Instagram, Send } from "lucide-react";
 import Link from "next/link";
 
 export default function Contact() {
@@ -14,9 +14,6 @@ export default function Contact() {
         const formData = new FormData(e.currentTarget);
 
         try {
-            // NOTA PARA EL USUARIO: Debes registrarte en https://formspree.io/
-            // Crear un nuevo formulario con tu email: proyectojazzylofi@gmail.com
-            // Y reemplazar "TU_ID_DE_FORMSPREE" con el código que te den (ej: xmqzqbdp)
             const response = await fetch("https://formspree.io/f/myzrjnvl", {
                 method: "POST",
                 body: formData,
@@ -28,7 +25,7 @@ export default function Contact() {
             if (response.ok) {
                 setStatus('success');
                 (e.target as HTMLFormElement).reset();
-                setTimeout(() => setStatus('idle'), 5000); // Reset status after 5s
+                setTimeout(() => setStatus('idle'), 5000);
             } else {
                 setStatus('error');
             }
@@ -39,11 +36,16 @@ export default function Contact() {
 
     return (
         <section id="contact" className="py-20 relative z-10 overflow-hidden">
+            {/* Background blobs */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                <div className="liquid-blob liquid-blob-primary blob-animate-1 w-[350px] h-[350px] top-[20%] left-[5%] opacity-20" />
+                <div className="liquid-blob liquid-blob-secondary blob-animate-3 w-[300px] h-[300px] bottom-[10%] right-[10%] opacity-20" />
+            </div>
 
-            <div className="container mx-auto px-4">
+            <div className="container mx-auto px-4 relative z-10">
                 <div className="max-w-4xl mx-auto">
                     <div className="text-center mb-12">
-                        <h2 className="font-display text-3xl md:text-4xl font-bold text-white mb-4" style={{ textShadow: '0 2px 10px rgba(0,0,0,0.8)' }}>¿Necesitas ayuda?</h2>
+                        <h2 className="font-display text-3xl md:text-4xl font-bold text-white mb-4 glass-text-glow">¿Necesitas ayuda?</h2>
                         <p className="text-gray-400">Contáctame directamente o envíame un mensaje.</p>
                     </div>
 
@@ -56,9 +58,9 @@ export default function Contact() {
                                 href="https://www.instagram.com/zalo.editz/"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="flex items-center gap-4 p-4 rounded-xl bg-black/90 backdrop-blur-xl border border-white/10 hover:border-primary/50 transition-all group shadow-2xl"
+                                className="flex items-center gap-4 p-4 rounded-xl glass-refraction transition-all group"
                             >
-                                <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-primary group-hover:text-black transition-colors">
+                                <div className="w-12 h-12 rounded-full glass-button flex items-center justify-center group-hover:shadow-[0_0_20px_rgba(230,36,41,0.4)] transition-all">
                                     <Instagram size={24} />
                                 </div>
                                 <div>
@@ -71,9 +73,9 @@ export default function Contact() {
                                 href="https://www.tiktok.com/@zaloedits"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="flex items-center gap-4 p-4 rounded-xl bg-black/90 backdrop-blur-xl border border-white/10 hover:border-primary/50 transition-all group shadow-2xl"
+                                className="flex items-center gap-4 p-4 rounded-xl glass-refraction transition-all group"
                             >
-                                <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-primary group-hover:text-black transition-colors">
+                                <div className="w-12 h-12 rounded-full glass-button flex items-center justify-center group-hover:shadow-[0_0_20px_rgba(230,36,41,0.4)] transition-all">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                         <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
                                     </svg>
@@ -87,12 +89,13 @@ export default function Contact() {
                         </div>
 
                         {/* Contact Form */}
-                        <form onSubmit={handleSubmit} className="space-y-4 bg-black/90 backdrop-blur-xl p-8 rounded-2xl border border-white/10 shadow-2xl">
+                        <form onSubmit={handleSubmit} className="space-y-4 glass-refraction rounded-2xl p-8 backdrop-blur-xl">
                             {status === 'success' && (
                                 <motion.div
                                     initial={{ opacity: 0, y: -10 }}
                                     animate={{ opacity: 1, y: 0 }}
-                                    className="p-4 bg-green-500/20 border border-green-500/50 rounded-lg text-green-200 text-sm"
+                                    className="p-4 rounded-lg text-green-200 text-sm glass-panel"
+                                    style={{ borderColor: 'rgba(74, 222, 128, 0.3)', background: 'rgba(74, 222, 128, 0.1)' }}
                                 >
                                     ¡Mensaje enviado con éxito! Te responderé pronto a tu email.
                                 </motion.div>
@@ -102,7 +105,8 @@ export default function Contact() {
                                 <motion.div
                                     initial={{ opacity: 0, y: -10 }}
                                     animate={{ opacity: 1, y: 0 }}
-                                    className="p-4 bg-red-500/20 border border-red-500/50 rounded-lg text-red-200 text-sm"
+                                    className="p-4 rounded-lg text-red-200 text-sm glass-panel"
+                                    style={{ borderColor: 'rgba(239, 68, 68, 0.3)', background: 'rgba(239, 68, 68, 0.1)' }}
                                 >
                                     Hubo un error al enviar el mensaje. Por favor intenta nuevamente o contáctame por Instagram.
                                 </motion.div>
@@ -115,7 +119,7 @@ export default function Contact() {
                                     id="name"
                                     name="name"
                                     required
-                                    className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-primary transition-colors"
+                                    className="w-full glass-input rounded-lg px-4 py-3"
                                     placeholder="Tu nombre"
                                 />
                             </div>
@@ -126,7 +130,7 @@ export default function Contact() {
                                     id="email"
                                     name="email"
                                     required
-                                    className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-primary transition-colors"
+                                    className="w-full glass-input rounded-lg px-4 py-3"
                                     placeholder="tu@email.com"
                                 />
                             </div>
@@ -137,14 +141,14 @@ export default function Contact() {
                                     name="message"
                                     required
                                     rows={4}
-                                    className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-primary transition-colors resize-none"
+                                    className="w-full glass-input rounded-lg px-4 py-3 resize-none"
                                     placeholder="¿En qué puedo ayudarte?"
                                 ></textarea>
                             </div>
                             <button
                                 type="submit"
                                 disabled={status === 'submitting'}
-                                className="w-full bg-white text-black font-bold py-4 rounded-lg hover:bg-primary transition-all flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="w-full glass-button glass-button-primary text-white font-bold py-4 rounded-lg transition-all flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 {status === 'submitting' ? (
                                     <span>Enviando...</span>

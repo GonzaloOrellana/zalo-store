@@ -21,16 +21,21 @@ export default function ProductCard({ product }: { product: ProductType }) {
     return (
         <Link href={`/products/${product.slug}`} className="block">
             <motion.div
-                className="group relative bg-black/90 backdrop-blur-xl rounded-xl overflow-hidden cursor-pointer border border-white/10 hover:border-primary/50 transition-colors duration-300 shadow-2xl"
+                className="group relative glass-refraction rounded-xl overflow-hidden cursor-pointer transition-all duration-500"
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5 }}
+                style={{
+                    boxShadow: isHovered
+                        ? '0 16px 48px rgba(0,0,0,0.4), 0 0 40px rgba(230,36,41,0.15)'
+                        : '0 8px 32px rgba(0,0,0,0.3)'
+                }}
             >
                 {/* Image Container */}
-                <div className="relative aspect-[4/5] w-full bg-gray-900 overflow-hidden">
+                <div className="relative aspect-[4/5] w-full bg-gray-900/50 overflow-hidden">
                     <Image
                         src={product.imageResult}
                         alt={`${product.name} Result`}
@@ -50,7 +55,7 @@ export default function ProductCard({ product }: { product: ProductType }) {
                     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-80" />
 
                     {/* Hover Badge */}
-                    <div className={`absolute top-4 right-4 bg-black/50 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-white border border-white/10 transition-opacity duration-300 ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
+                    <div className={`absolute top-4 right-4 glass-panel px-3 py-1 rounded-full text-xs font-bold text-white transition-opacity duration-300 ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
                         Antes
                     </div>
                 </div>
@@ -65,7 +70,7 @@ export default function ProductCard({ product }: { product: ProductType }) {
                         <button
                             onClick={handleAddToCart}
                             aria-label={`Add ${product.name} to cart`}
-                            className="bg-white/10 hover:bg-primary hover:text-black text-white p-3 rounded-full backdrop-blur-md transition-all duration-300 transform group-hover:scale-110 group-hover:shadow-[0_0_20px_rgba(230,36,41,0.6)]"
+                            className="glass-button p-3 rounded-full text-white transition-all duration-300 transform group-hover:scale-110 group-hover:shadow-[0_0_20px_rgba(230,36,41,0.6)]"
                         >
                             <ShoppingCart size={20} />
                         </button>
