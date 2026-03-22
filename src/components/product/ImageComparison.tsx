@@ -7,9 +7,10 @@ interface ImageComparisonProps {
     imageRaw: string;
     imageResult: string;
     productName: string;
+    priority?: boolean;
 }
 
-export default function ImageComparison({ imageRaw, imageResult, productName }: ImageComparisonProps) {
+export default function ImageComparison({ imageRaw, imageResult, productName, priority = false }: ImageComparisonProps) {
     const [sliderPosition, setSliderPosition] = useState(50);
     const [isDragging, setIsDragging] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
@@ -64,7 +65,7 @@ export default function ImageComparison({ imageRaw, imageResult, productName }: 
                     width={1920}
                     height={1080}
                     className="w-full h-auto"
-                    priority
+                    priority={priority}
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
                 />
 
@@ -81,7 +82,7 @@ export default function ImageComparison({ imageRaw, imageResult, productName }: 
                     width={1920}
                     height={1080}
                     className="w-full h-auto"
-                    priority
+                    priority={priority}
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
                 />
 

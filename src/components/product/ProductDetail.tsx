@@ -50,6 +50,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                             imageRaw={product.imageRaw}
                             imageResult={product.imageResult}
                             productName={product.name}
+                            priority={true}
                         />
                     </motion.div>
 

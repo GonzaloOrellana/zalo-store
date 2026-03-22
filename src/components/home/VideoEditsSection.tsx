@@ -1,6 +1,6 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useInView } from "framer-motion";
 import { ChevronLeft, ChevronRight, Play, Pause } from "lucide-react";
 
 // Video data from public/Videos folder
@@ -39,6 +39,8 @@ export default function VideoEditsSection() {
 
     const [showControls, setShowControls] = useState(true);
     const controlsTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+    const sectionRef = useRef<HTMLElement>(null);
+    const isInView = useInView(sectionRef, { once: false, amount: 0.2 });
 
     const handlePrevious = () => {
         setCurrentIndex((prev) => (prev === 0 ? videoEdits.length - 1 : prev - 1));
@@ -74,7 +76,7 @@ export default function VideoEditsSection() {
     useEffect(() => {
         videoRefs.current.forEach((video, index) => {
             if (video) {
-                if (index === currentIndex && isPlaying) {
+                if (index === currentIndex && isPlaying && isInView) {
                     video.play().catch(error => console.warn("Video auto-play prevented:", error));
                     handleInteraction();
                 } else {
@@ -82,7 +84,7 @@ export default function VideoEditsSection() {
                 }
             }
         });
-    }, [currentIndex, isPlaying]);
+    }, [currentIndex, isPlaying, isInView]);
 
     const getCardStyle = (index: number) => {
         const diff = index - currentIndex;
@@ -153,7 +155,7 @@ export default function VideoEditsSection() {
     };
 
     return (
-        <section className="relative py-20 md:py-32 overflow-hidden">
+        <section ref={sectionRef} className="relative py-20 md:py-32 overflow-hidden">
             {/* Glassmorphism background */}
             <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
 
@@ -235,9 +237,9 @@ export default function VideoEditsSection() {
                                                     src={video.videoPath}
                                                     className="absolute inset-0 w-full h-full object-cover"
                                                     loop
-                                                    autoPlay
                                                     playsInline
                                                     muted
+                                                    preload={index === currentIndex && isInView ? "auto" : "none"}
                                                 />
 
                                                 {/* Overlay effect */}
