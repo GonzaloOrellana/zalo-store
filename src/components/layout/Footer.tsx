@@ -38,7 +38,7 @@ export default function Footer() {
                     <div className="mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-600" style={{ borderTop: '1px solid rgba(255,255,255,0.05)' }}>
                         <div className="flex flex-col items-center md:items-start gap-2">
                             <p>&copy; {new Date().getFullYear()} ZaloEdits. Todos los derechos reservados.</p>
-                            <p>Diseñado y desarrollado por <Link href="https://gonzaorellana.com.ar/portfolio/" target="_blank" rel="noopener noreferrer" className="text-primary hover:text-primary/80 transition-colors">Gonzalo Orellana</Link></p>
+                            <p>Diseñado y desarrollado por <Link href="https://www.gonzaorellana.com.ar/" target="_blank" rel="noopener noreferrer" className="text-primary hover:text-primary/80 transition-colors">Gonzalo Orellana</Link></p>
                         </div>
                         <div className="flex gap-6">
                             <Link href="#" className="hover:text-gray-400 transition-colors">Términos</Link>
